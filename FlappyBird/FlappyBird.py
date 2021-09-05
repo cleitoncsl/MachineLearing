@@ -17,7 +17,7 @@ IMAGEM_PASSARO = [
 pygame.font.init()
 FONTE_PONTOS = pygame.font.SysFont('arial', 50)
 
-class Passaro:
+class Passaros:
     IMGS = IMAGEM_PASSARO
     # Animação de Rotação
     ROTACAO_MAXIMA = 25
@@ -91,7 +91,7 @@ class Passaro:
         pygame.mask.from_surface(self.imagem)
 
 
-class Cano:
+class Canos:
     DISTANCIA = 200
     VELOCIDADE = 5
 
@@ -137,3 +137,48 @@ class Chao:
     VELOCIDADE_CHAO = 5
     LARGURA_CHAO = IMAGEM_CHAO.get_width()
     IMAGEM = IMAGEM_CHAO
+
+    def __init__(self, y):
+        self.y = y
+        self.x1 = 0
+        self.x2 = self.LARGURA_CHAO
+
+    def mover(self):
+        self.x1 -= self.VELOCIDADE_CHAO
+        self.x2 -= self.VELOCIDADE_CHAO
+
+        if self.x1 + self.LARGURA_CHAO < 0:
+            self.x1 = self.x1 + self.LARGURA_CHAO
+        if self.x2 + self.LARGURA_CHAO < 0:
+            self.x2 = self.x2 + self.LARGURA_CHAO
+
+    def desenhar(self, tela):
+        tela.blit(self.IMAGEM, (self.x1, self.y))
+        tela.blit(self.IMAGEM, (self.x2, self.y))
+
+def desenhar_tela(tela, Passaros, Canos, Chao, pontos):
+    tela.blit(IMAGEM_BACKGROUND, (0, 0))
+    for passaro in Passaros:
+        passaro.desenhar(tela)
+    for cano in Canos:
+        cano.desenhar(tela)
+
+    texto = FONTE_PONTOS.render(f"Pontuação: {pontos}", 1, (255, 255, 255))
+    tela.blit (texto, (TELA_LARGURA - 10 - texto.get_width(), 10))
+    Chao.desenhar(tela)
+    pygame.display.update()
+
+def main():
+    passaros = [Passaros(230,350)]
+    chao = Chao(730)
+    canos = [Canos(700)]
+    tela = pygame.display.set_mode((TELA_LARGURA, TELA_ALTURA))
+    pontos = 0
+    relogio = pygame.time.Clock()
+
+    rodando = True
+
+    while rodando:
+        desenhar_tela(tela, Passaros, canos, chao, pontos)
+
+
