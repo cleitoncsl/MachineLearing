@@ -148,9 +148,9 @@ class Chao:
         self.x2 -= self.VELOCIDADE_CHAO
 
         if self.x1 + self.LARGURA_CHAO < 0:
-            self.x1 = self.x1 + self.LARGURA_CHAO
+            self.x1 = self.x2 + self.LARGURA_CHAO
         if self.x2 + self.LARGURA_CHAO < 0:
-            self.x2 = self.x2 + self.LARGURA_CHAO
+            self.x2 = self.x1 + self.LARGURA_CHAO
 
     def desenhar(self, tela):
         tela.blit(self.IMAGEM, (self.x1, self.y))
