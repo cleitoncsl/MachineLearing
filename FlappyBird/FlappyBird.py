@@ -88,7 +88,7 @@ class Passaros:
         tela.blit(imagem_rotacionada, retangulo.topleft)
 
     def get_mask(self):
-        pygame.mask.from_surface(self.imagem)
+        return pygame.mask.from_surface(self.imagem)
 
 
 class Canos:
@@ -216,11 +216,10 @@ def main():
         for cano in remover_canos:
             canos.remove(cano)
 
-
-
-
-
+        for i, passaro in enumerate(passaros):
+            if (passaro.y + passaro.imagem.get_height()) > chao.y or passaro.y < 0:
+                passaros.pop(i)
 
         desenhar_tela(tela, passaros, canos, chao, pontos)
-
-
+if __name__ == '__main__':
+    main()
