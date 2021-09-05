@@ -188,7 +188,7 @@ def main():
                 quit()
 
             if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_ESCAPE:
+                if evento.key == pygame.K_SPACE:
                     for passaro in passaros:
                         passaro.pular()
 
