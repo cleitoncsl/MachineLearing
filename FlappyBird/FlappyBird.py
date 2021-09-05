@@ -87,10 +87,22 @@ class Passaro:
         retangulo = imagem_rotacionada.get_rect(center=posicao_centro_imagem)
         tela.blit(imagem_rotacionada, retangulo.topleft)
 
+    def get_mask(self):
+        pygame.mask.from_surface(self.imagem)
 
 
 class Cano:
-    pass
+    DISTANCIA = 200
+    VELOCIDADE = 5
+
+    def __init__(self, x):
+        self.x = x
+        self.altura = 0
+        self.posicao_topo = 0
+        self.posicao_base = 0
+        self.CANO_TOPO = pygame.transform.flip(IMAGEM_CANO, False, True)
+        self.CANO_BASE = IMAGEM_CANO
+
 
 
 
