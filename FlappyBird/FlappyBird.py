@@ -179,6 +179,48 @@ def main():
     rodando = True
 
     while rodando:
-        desenhar_tela(tela, Passaros, canos, chao, pontos)
+        relogio.tick(30)
+
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                rodando = False
+                pygame.quit()
+                quit()
+
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    for passaro in passaros:
+                        passaro.pular()
+
+        for passaro in passaros:
+            passaro.mover()
+        chao.mover()
+
+        adicionar_cano = False
+        remover_canos = []
+        for cano in canos:
+            for i, passaro in enumerate(passaros):
+                if cano.colidir(passaro):
+                    passaros.pop(i)
+                if not cano.passou and passaro.x > cano.x:
+                    cano.passou = True
+                    adicionar_cano = True
+            cano.mover()
+            if cano.x + cano.CANO_TOPO.get_width() < 0:
+                remover_canos.append(cano)
+
+        if adicionar_cano:
+            pontos += 1
+            canos.append(Canos(600))
+
+        for cano in remover_canos:
+            canos.remove(cano)
+
+
+
+
+
+
+        desenhar_tela(tela, passaros, canos, chao, pontos)
 
 
