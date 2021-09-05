@@ -1,6 +1,10 @@
 import pygame
 import os
 import random
+import neat
+
+ai_jogando = True
+geracao = 0
 
 TELA_LARGURA = 500
 TELA_ALTURA = 800
@@ -16,6 +20,7 @@ IMAGEM_PASSARO = [
 
 pygame.font.init()
 FONTE_PONTOS = pygame.font.SysFont('arial', 50)
+
 
 class Passaros:
     IMGS = IMAGEM_PASSARO
@@ -41,11 +46,11 @@ class Passaros:
 
     def mover(self):
 
-        #define o deslocamento
+        # define o deslocamento
         self.tempo += 1
         deslocamento = 1.5 * (self.tempo ** 2) + self.velocidade * self.tempo
 
-        #restringir o deslocamento
+        # restringir o deslocamento
         if deslocamento > 16:
             deslocamento = 16
         elif deslocamento < 0:
@@ -76,14 +81,14 @@ class Passaros:
             self.imagem = self.IMGS[0]
             self.contagem_imagem = 0
 
-        #se o passaro estiver caindo:
+        # se o passaro estiver caindo:
         if self.angulo <= -80:
             self.imagem = self.IMGS[1]
             self.contagem_imagem = self.TEMPO_ANIMACAO * 2
 
-        #desenhar a imagem
+        # desenhar a imagem
         imagem_rotacionada = pygame.transform.rotate(self.imagem, self.angulo)
-        posicao_centro_imagem = self.imagem.get_rect(topleft=(self.x,self.y)).center
+        posicao_centro_imagem = self.imagem.get_rect(topleft=(self.x, self.y)).center
         retangulo = imagem_rotacionada.get_rect(center=posicao_centro_imagem)
         tela.blit(imagem_rotacionada, retangulo.topleft)
 
@@ -133,6 +138,7 @@ class Canos:
         else:
             return False
 
+
 class Chao:
     VELOCIDADE_CHAO = 5
     LARGURA_CHAO = IMAGEM_CHAO.get_width()
@@ -156,6 +162,7 @@ class Chao:
         tela.blit(self.IMAGEM, (self.x1, self.y))
         tela.blit(self.IMAGEM, (self.x2, self.y))
 
+
 def desenhar_tela(tela, Passaros, Canos, Chao, pontos):
     tela.blit(IMAGEM_BACKGROUND, (0, 0))
     for passaro in Passaros:
@@ -164,18 +171,24 @@ def desenhar_tela(tela, Passaros, Canos, Chao, pontos):
         cano.desenhar(tela)
 
     texto = FONTE_PONTOS.render(f"Pontuação: {pontos}", 1, (255, 255, 255))
-    tela.blit (texto, (TELA_LARGURA - 10 - texto.get_width(), 10))
+    tela.blit(texto, (TELA_LARGURA - 10 - texto.get_width(), 10))
+
+    if ai_jogando:
+        texto = FONTE_PONTOS.render(f"Geração: {geracao}", 1, (255, 255, 255))
+        tela.blit(texto, (10, 10))
+
+
     Chao.desenhar(tela)
     pygame.display.update()
 
+
 def main():
-    passaros = [Passaros(230,350)]
+    passaros = [Passaros(230, 350)]
     chao = Chao(730)
     canos = [Canos(700)]
     tela = pygame.display.set_mode((TELA_LARGURA, TELA_ALTURA))
     pontos = 0
     relogio = pygame.time.Clock()
-
     rodando = True
 
     while rodando:
@@ -221,5 +234,7 @@ def main():
                 passaros.pop(i)
 
         desenhar_tela(tela, passaros, canos, chao, pontos)
+
+
 if __name__ == '__main__':
     main()
