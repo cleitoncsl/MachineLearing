@@ -61,7 +61,7 @@ class Passaro:
             if self.angulo > -90:
                 self.angulo -= self.VELOCIDADE_ROTACAO
 
-
+    def desenhar(self):
 
 
 
