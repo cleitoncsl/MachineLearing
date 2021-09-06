@@ -282,7 +282,15 @@ def rodar(caminho_config):
                                 caminho_config
                                 )
     populacao = neat.Population(config)
-    populacao.run(main)
+    populacao.add_reporter(neat.StdOutReporter(True))
+    populacao.add_reporter(neat.StatisticsReporter())
+
+
+    if ai_jogando:
+        populacao.run(main)
+    else:
+        main(None, None)
+
 
 
 if __name__ == '__main__':
