@@ -5,7 +5,7 @@ import neat
 
 ai_jogando = True
 geracao = 0
-
+qtde = []
 TELA_LARGURA = 500
 TELA_ALTURA = 800
 
@@ -98,7 +98,8 @@ class Passaros:
 
 class Canos:
     DISTANCIA = 175
-    VELOCIDADE = 10
+
+    VELOCIDADE_CANO = 5
 
     def __init__(self, x):
         self.x = x
@@ -116,7 +117,7 @@ class Canos:
         self.pos_base = self.altura + self.DISTANCIA
 
     def mover(self):
-        self.x -= self.VELOCIDADE
+        self.x -= self.VELOCIDADE_CANO
 
     def desenhar(self, tela):
         tela.blit(self.CANO_TOPO, (self.x, self.pos_topo))
@@ -140,7 +141,7 @@ class Canos:
 
 
 class Chao:
-    VELOCIDADE_CHAO = 10
+    VELOCIDADE_CHAO = 5
     LARGURA_CHAO = IMAGEM_CHAO.get_width()
     IMAGEM = IMAGEM_CHAO
 
@@ -177,12 +178,18 @@ def desenhar_tela(tela, Passaros, Canos, Chao, pontos):
         texto = FONTE_PONTOS.render(f"Geração: {geracao}", 1, (255, 255, 255))
         tela.blit(texto, (10, 10))
 
+        texto = FONTE_PONTOS.render(f"Qtd.: {qtde}", 1, (255, 255, 255))
+        tela.blit(texto, (10, 30))
+
+        texto = FONTE_PONTOS.render(f"Velocidade.: {cano.VELOCIDADE_CANO}", 1, (255, 255, 255))
+        tela.blit(texto, (10, 50))
+
     Chao.desenhar(tela)
     pygame.display.update()
 
 
 def main(genomas, config):  # fitness function
-    global geracao, lista_genomas
+    global geracao, lista_genomas, qtde, velocidade
     geracao += 1
 
     if ai_jogando:
@@ -195,6 +202,7 @@ def main(genomas, config):  # fitness function
             genoma.fitness = 0  # pontuação pra rede neural. Pontuacao interna.
             lista_genomas.append(genoma)
             passaros.append(Passaros(230, 350))  # Cria o Passaro nessa posição
+
     else:
         passaros = [Passaros(230, 350)]
     chao = Chao(730)
@@ -203,6 +211,8 @@ def main(genomas, config):  # fitness function
     pontos = 0
     relogio = pygame.time.Clock()
     rodando = True
+    qtde = len(passaros)
+    velocidade = 0
 
     while rodando:
         relogio.tick(30)
@@ -223,6 +233,7 @@ def main(genomas, config):  # fitness function
         if len(passaros) > 0:
             if len(canos) > 1 and passaros[0].x > canos[0].x + (canos[0].CANO_TOPO.get_width()):
                 indice_cano = 1
+
         else:
             rodando = False
             break
@@ -245,6 +256,7 @@ def main(genomas, config):  # fitness function
             for i, passaro in enumerate(passaros):
                 if cano.colidir(passaro):
                     passaros.pop(i)
+                    qtde = len(passaros)
                     if ai_jogando:
                         lista_genomas[i].fitness -= 1
                         lista_genomas.pop(i)
@@ -254,14 +266,18 @@ def main(genomas, config):  # fitness function
                     cano.passou = True
                     adicionar_cano = True
             cano.mover()
+
             if cano.x + cano.CANO_TOPO.get_width() < 0:
                 remover_canos.append(cano)
 
         if adicionar_cano:
             pontos += 1
+            velocidade += 1
+
             canos.append(Canos(800))
             for genoma in lista_genomas:
                 genoma.fitness += 5
+
         for cano in remover_canos:
             canos.remove(cano)
 
