@@ -21,7 +21,6 @@ IMAGEM_PASSARO = [
 pygame.font.init()
 FONTE_PONTOS = pygame.font.SysFont('comicsans', 30)
 
-
 class Passaros:
     IMGS = IMAGEM_PASSARO
     # Animação de Rotação
@@ -38,6 +37,7 @@ class Passaros:
         self.tempo = 0
         self.contagem_imagem = 0
         self.imagem = self.IMGS[0]
+        self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
     def pular(self):
         self.velocidade = -8 #mudei 20:43 06/09/2021
@@ -54,7 +54,7 @@ class Passaros:
         if deslocamento > 16:
             deslocamento = 16
         elif deslocamento < 0:
-            deslocamento -= 2
+            deslocamento -= 5 #original 2
 
         self.y += deslocamento
 
@@ -67,6 +67,8 @@ class Passaros:
                 self.angulo -= self.VELOCIDADE_ROTACAO
 
     def desenhar(self, tela):
+        # Definir qual a imagem que será usada.
+
         self.contagem_imagem += 1
 
         if self.contagem_imagem < self.TEMPO_ANIMACAO:
@@ -82,6 +84,7 @@ class Passaros:
             self.contagem_imagem = 0
 
         # se o passaro estiver caindo:
+
         if self.angulo <= -80:
             self.imagem = self.IMGS[1]
             self.contagem_imagem = self.TEMPO_ANIMACAO * 2
@@ -91,15 +94,16 @@ class Passaros:
         posicao_centro_imagem = self.imagem.get_rect(topleft=(self.x, self.y)).center
         retangulo = imagem_rotacionada.get_rect(center=posicao_centro_imagem)
         tela.blit(imagem_rotacionada, retangulo.topleft)
+        self.rect = pygame.Rect(self.x, self.y, imagem_rotacionada.get_width(), imagem_rotacionada.get_height())
+        #pygame.draw.rect(tela, self.color, (self.rect.x, self.rect.y, imagem_rotacionada.get_width(), imagem_rotacionada.get_height()))
+        pygame.draw.rect(tela, self.color , (self.rect.x, self.rect.y, self.rect.width, self.rect.height), 2)
 
     def get_mask(self):
         return pygame.mask.from_surface(self.imagem)
 
-
 class Canos:
     DISTANCIA = 175
-
-    VELOCIDADE_CANO = 5
+    VELOCIDADE_CANO = 15
 
     def __init__(self, x):
         self.x = x
@@ -117,6 +121,7 @@ class Canos:
         self.pos_base = self.altura + self.DISTANCIA
 
     def mover(self):
+
         self.x -= self.VELOCIDADE_CANO
 
     def desenhar(self, tela):
@@ -168,6 +173,7 @@ def desenhar_tela(tela, Passaros, Canos, Chao, pontos):
     tela.blit(IMAGEM_BACKGROUND, (0, 0))
     for passaro in Passaros:
         passaro.desenhar(tela)
+        pass
     for cano in Canos:
         cano.desenhar(tela)
 
@@ -188,9 +194,12 @@ def desenhar_tela(tela, Passaros, Canos, Chao, pontos):
     pygame.display.update()
 
 
+
 def main(genomas, config):  # fitness function
     global geracao, lista_genomas, qtde, velocidade
     geracao += 1
+    velocidade = 0
+    obstaculos = []
 
     if ai_jogando:
         redes = []
@@ -212,7 +221,6 @@ def main(genomas, config):  # fitness function
     relogio = pygame.time.Clock()
     rodando = True
     qtde = len(passaros)
-    velocidade = 0
 
     while rodando:
         relogio.tick(30)
@@ -272,8 +280,6 @@ def main(genomas, config):  # fitness function
 
         if adicionar_cano:
             pontos += 1
-            velocidade += 1
-
             canos.append(Canos(800))
             for genoma in lista_genomas:
                 genoma.fitness += 5
