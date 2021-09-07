@@ -19,7 +19,7 @@ IMAGEM_PASSARO = [
 ]
 
 pygame.font.init()
-FONTE_PONTOS = pygame.font.SysFont('arial', 20)
+FONTE_PONTOS = pygame.font.SysFont('comicsans', 30)
 
 
 class Passaros:
@@ -40,7 +40,7 @@ class Passaros:
         self.imagem = self.IMGS[0]
 
     def pular(self):
-        self.velocidade = -10.5
+        self.velocidade = -8 #mudei 20:43 06/09/2021
         self.tempo = 0
         self.altura = self.y
 
@@ -97,8 +97,8 @@ class Passaros:
 
 
 class Canos:
-    DISTANCIA = 200
-    VELOCIDADE = 5
+    DISTANCIA = 175
+    VELOCIDADE = 10
 
     def __init__(self, x):
         self.x = x
@@ -140,7 +140,7 @@ class Canos:
 
 
 class Chao:
-    VELOCIDADE_CHAO = 5
+    VELOCIDADE_CHAO = 10
     LARGURA_CHAO = IMAGEM_CHAO.get_width()
     IMAGEM = IMAGEM_CHAO
 
@@ -259,7 +259,7 @@ def main(genomas, config):  # fitness function
 
         if adicionar_cano:
             pontos += 1
-            canos.append(Canos(600))
+            canos.append(Canos(800))
             for genoma in lista_genomas:
                 genoma.fitness += 5
         for cano in remover_canos:
