@@ -103,7 +103,7 @@ class Passaros:
 
 class Canos:
     DISTANCIA = 175
-    VELOCIDADE_CANO = 15
+    VELOCIDADE_CANO = 5
 
     def __init__(self, x):
         self.x = x
@@ -128,6 +128,12 @@ class Canos:
     def desenhar(self, tela):
         tela.blit(self.CANO_TOPO, (self.x, self.pos_topo))
         tela.blit(self.CANO_BASE, (self.x, self.pos_base))
+
+        self.rect_base = pygame.Rect(self.x, self.pos_base, self.CANO_BASE.get_width(),self.CANO_BASE.get_height())
+        pygame.draw.rect(tela, self.color, (self.rect_base.x, self.rect_base.y, self.rect_base.width, self.rect_base.height), 5)
+
+        self.rect_topo = pygame.Rect(self.x, self.pos_topo, self.CANO_BASE.get_width(),self.CANO_TOPO.get_height())
+        pygame.draw.rect(tela, self.color, (self.rect_topo.x, self.rect_topo.y, self.rect_topo.width, self.rect_topo.height), 5)
 
 
     def colidir(self, passaro):
@@ -196,7 +202,7 @@ def desenhar_tela(tela, Passaros, Canos, Chao, pontos):
     pygame.display.update()
 
 def main(genomas, config):  # fitness function
-    global geracao, lista_genomas, qtde, velocidade
+    global geracao, lista_genomas, qtde, velocidade, obstaculos
     geracao += 1
     velocidade = 0
     obstaculos = []
