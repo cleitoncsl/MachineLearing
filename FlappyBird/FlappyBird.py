@@ -95,8 +95,8 @@ class Passaros:
         retangulo = imagem_rotacionada.get_rect(center=posicao_centro_imagem)
         tela.blit(imagem_rotacionada, retangulo.topleft)
         self.rect = pygame.Rect(self.x, self.y, imagem_rotacionada.get_width(), imagem_rotacionada.get_height())
-        #pygame.draw.rect(tela, self.color, (self.rect.x, self.rect.y, imagem_rotacionada.get_width(), imagem_rotacionada.get_height()))
         pygame.draw.rect(tela, self.color , (self.rect.x, self.rect.y, self.rect.width, self.rect.height), 2)
+
 
     def get_mask(self):
         return pygame.mask.from_surface(self.imagem)
@@ -113,6 +113,7 @@ class Canos:
         self.CANO_TOPO = pygame.transform.flip(IMAGEM_CANO, False, True)
         self.CANO_BASE = IMAGEM_CANO
         self.passou = False
+        self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         self.definir_altura()
 
     def definir_altura(self):
@@ -127,6 +128,7 @@ class Canos:
     def desenhar(self, tela):
         tela.blit(self.CANO_TOPO, (self.x, self.pos_topo))
         tela.blit(self.CANO_BASE, (self.x, self.pos_base))
+
 
     def colidir(self, passaro):
         passaro_mask = passaro.get_mask()
@@ -193,8 +195,6 @@ def desenhar_tela(tela, Passaros, Canos, Chao, pontos):
     Chao.desenhar(tela)
     pygame.display.update()
 
-
-
 def main(genomas, config):  # fitness function
     global geracao, lista_genomas, qtde, velocidade
     geracao += 1
@@ -238,6 +238,7 @@ def main(genomas, config):  # fitness function
                             passaro.pular()
 
         indice_cano = 0
+
         if len(passaros) > 0:
             if len(canos) > 1 and passaros[0].x > canos[0].x + (canos[0].CANO_TOPO.get_width()):
                 indice_cano = 1
