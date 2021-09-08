@@ -97,7 +97,6 @@ class Passaros:
         self.rect = pygame.Rect(self.x, self.y, imagem_rotacionada.get_width(), imagem_rotacionada.get_height())
         pygame.draw.rect(tela, self.color , (self.rect.x, self.rect.y, self.rect.width, self.rect.height), 2)
 
-
     def get_mask(self):
         return pygame.mask.from_surface(self.imagem)
 
@@ -134,7 +133,6 @@ class Canos:
 
         self.rect_topo = pygame.Rect(self.x, self.pos_topo, self.CANO_BASE.get_width(),self.CANO_TOPO.get_height())
         pygame.draw.rect(tela, self.color, (self.rect_topo.x, self.rect_topo.y, self.rect_topo.width, self.rect_topo.height), 5)
-
 
     def colidir(self, passaro):
         passaro_mask = passaro.get_mask()
@@ -202,10 +200,10 @@ def desenhar_tela(tela, Passaros, Canos, Chao, pontos):
     pygame.display.update()
 
 def main(genomas, config):  # fitness function
-    global geracao, lista_genomas, qtde, velocidade, obstaculos
+    global geracao, lista_genomas, qtde, velocidade, cano
     geracao += 1
     velocidade = 0
-    obstaculos = []
+    cano = []
 
     if ai_jogando:
         redes = []
