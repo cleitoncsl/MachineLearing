@@ -3,6 +3,10 @@ import os
 import random
 import neat
 
+# esse github vai me ajudar a colocar uma linha
+# https://github.com/bapiraj/flappy-bird-ai/blob/master/flappy.py
+
+
 ai_jogando = True
 geracao = 0
 qtde = []
@@ -94,15 +98,16 @@ class Passaros:
         posicao_centro_imagem = self.imagem.get_rect(topleft=(self.x, self.y)).center
         retangulo = imagem_rotacionada.get_rect(center=posicao_centro_imagem)
         tela.blit(imagem_rotacionada, retangulo.topleft)
-        self.rect = pygame.Rect(self.x, self.y, imagem_rotacionada.get_width(), imagem_rotacionada.get_height())
-        pygame.draw.rect(tela, self.color , (self.rect.x, self.rect.y, self.rect.width, self.rect.height), 2)
+        self.rect_passaro = pygame.Rect(self.x, self.y, imagem_rotacionada.get_width(), imagem_rotacionada.get_height())
+        pygame.draw.rect(tela, self.color, (self.rect_passaro.x, self.rect_passaro.y,
+                                            self.rect_passaro.width, self.rect_passaro.height), 2)
 
     def get_mask(self):
         return pygame.mask.from_surface(self.imagem)
 
 class Canos:
     DISTANCIA = 175
-    VELOCIDADE_CANO = 5
+    VELOCIDADE_CANO = 20
 
     def __init__(self, x):
         self.x = x
@@ -133,6 +138,7 @@ class Canos:
 
         self.rect_topo = pygame.Rect(self.x, self.pos_topo, self.CANO_BASE.get_width(),self.CANO_TOPO.get_height())
         pygame.draw.rect(tela, self.color, (self.rect_topo.x, self.rect_topo.y, self.rect_topo.width, self.rect_topo.height), 5)
+
 
     def colidir(self, passaro):
         passaro_mask = passaro.get_mask()
