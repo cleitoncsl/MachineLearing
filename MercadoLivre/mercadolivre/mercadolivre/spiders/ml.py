@@ -3,7 +3,7 @@ import scrapy
 
 class MlSpider(scrapy.Spider):
     name = 'ml'
-    start_urls = ['https://www.mercadolivre.com.br/ofertas']
+    start_urls = ['https://www.mercadolivre.com.br/ofertas?page=1']
 
     def parse(self, response, **kwargs):
         for i in response.xpath('//li[@class="promotion-item"]'):
@@ -16,3 +16,8 @@ class MlSpider(scrapy.Spider):
                 'title' : title,
                 'link' : link
             }
+
+        next_page = response.xpath('//a[contains(@title,"Próxima")]/@href').get()
+
+        if next_page:
+            yield scrapy.Request(url=next_page, callback=self.parse)
