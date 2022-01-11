@@ -12,9 +12,9 @@ class MlSpider(scrapy.Spider):
             link = i.xpath('./a/@href').get()
 
             yield {
-                'price':  price,
-                'title':  title,
-                'link':  link
+                'price': price,
+                'title': title,
+                'link': link
             }
 
         next_page = response.xpath('//a[contains(@title,"Próxima")]/@href').get()
