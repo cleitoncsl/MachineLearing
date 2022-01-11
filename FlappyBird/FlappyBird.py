@@ -25,6 +25,7 @@ IMAGEM_PASSARO = [
 pygame.font.init()
 FONTE_PONTOS = pygame.font.SysFont('comicsans', 30)
 
+
 class Passaros:
     IMGS = IMAGEM_PASSARO
     # Animação de Rotação
@@ -44,7 +45,7 @@ class Passaros:
         self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
     def pular(self):
-        self.velocidade = -8 #mudei 20:43 06/09/2021
+        self.velocidade = -8  # mudei 20:43 06/09/2021
         self.tempo = 0
         self.altura = self.y
 
@@ -58,7 +59,7 @@ class Passaros:
         if deslocamento > 16:
             deslocamento = 16
         elif deslocamento < 0:
-            deslocamento -= 5 #original 2
+            deslocamento -= 5  # original 2
 
         self.y += deslocamento
 
@@ -105,6 +106,7 @@ class Passaros:
     def get_mask(self):
         return pygame.mask.from_surface(self.imagem)
 
+
 class Canos:
     DISTANCIA = 175
     VELOCIDADE_CANO = 20
@@ -133,12 +135,13 @@ class Canos:
         tela.blit(self.CANO_TOPO, (self.x, self.pos_topo))
         tela.blit(self.CANO_BASE, (self.x, self.pos_base))
 
-        self.rect_base = pygame.Rect(self.x, self.pos_base, self.CANO_BASE.get_width(),self.CANO_BASE.get_height())
-        pygame.draw.rect(tela, self.color, (self.rect_base.x, self.rect_base.y, self.rect_base.width, self.rect_base.height), 5)
+        self.rect_base = pygame.Rect(self.x, self.pos_base, self.CANO_BASE.get_width(), self.CANO_BASE.get_height())
+        pygame.draw.rect(tela, self.color,
+                         (self.rect_base.x, self.rect_base.y, self.rect_base.width, self.rect_base.height), 5)
 
-        self.rect_topo = pygame.Rect(self.x, self.pos_topo, self.CANO_BASE.get_width(),self.CANO_TOPO.get_height())
-        pygame.draw.rect(tela, self.color, (self.rect_topo.x, self.rect_topo.y, self.rect_topo.width, self.rect_topo.height), 5)
-
+        self.rect_topo = pygame.Rect(self.x, self.pos_topo, self.CANO_BASE.get_width(), self.CANO_TOPO.get_height())
+        pygame.draw.rect(tela, self.color,
+                         (self.rect_topo.x, self.rect_topo.y, self.rect_topo.width, self.rect_topo.height), 5)
 
     def colidir(self, passaro):
         passaro_mask = passaro.get_mask()
@@ -204,6 +207,7 @@ def desenhar_tela(tela, Passaros, Canos, Chao, pontos):
 
     Chao.desenhar(tela)
     pygame.display.update()
+
 
 def main(genomas, config):  # fitness function
     global geracao, lista_genomas, qtde, velocidade, cano
